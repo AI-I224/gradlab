@@ -1,3 +1,5 @@
+import math as m
+
 class Value:
     """
     Stores a single scalar value and its' gradient
@@ -31,7 +33,7 @@ class Value:
         Returns the output of the addition between Value objects and other constants
 
         Args:
-            other: 
+            other: Defines the other operand in the operation
         """
 
         # logic ensures that any non-Value object used in an operation
@@ -42,16 +44,77 @@ class Value:
         return out
 
     def __mul__(self, other):
-        pass
+        """
+        Returns the output of the multiplication between Value objects and other constants
+
+        Args:
+            other: Defines the other operand in the expression
+        """
+        other = other if isinstance(other, Value) else Value(other)
+        out = Value(self.data * other.data, (self, other), '*')
+
+        return out
 
     def __pow__(self, other):
-        pass
+        """
+        Returns the output of the Value object to the power of an integer/float constant
+
+        Args:
+            other: Defines the power of the Value object
+        """
+        if not isinstance(other, (int, float)):
+            raise TypeError("Must be an integer or float")
+        out = Value(self.data ** other, (self,), f'**{other}')
+
+        return out
 
     def __neg__(self):
-        pass
+        """
+        Returns the negative of the Value object
+        """
+        return self * -1
 
     def __sub__(self, other):
-        pass
+        """
+        Returns the output of the subtraction between Value objects and other constants
+
+        Args:
+            other: Defines the power of the Value object
+        """
+        return self + (-other)
+    
+    def sigmoid(self):
+        """
+        Returns the sigmoid of the Value object
+        """
+        out = Value(1 / (1 + (m.e ** -self.data)), (self,), 'sigmoid')
+
+        return out
+
+    def tanh(self):
+        """
+        Returns the tanh of the Value object
+        """
+        out = Value(2*(2*self).sigmoid().data - 1, (self,), 'tanh')
+
+        return out
+    
+    def exp(self):
+        """
+        Returns the exponential of the Value object
+        """
+        out = Value(m.e ** self.data, (self,), 'exp')
+
+        return out
+    
+    def relu(self):
+        """
+        Returns the ReLU of Value object
+        """
+        self.data = self.data if self.data > 0 else 0
+        out = Value(self.data, (self,), 'relu')
+
+        return out
 
     def __rsub__(self, other):
         pass
@@ -60,7 +123,7 @@ class Value:
         pass
 
     def __rmul__(self, other):
-        pass
+        return self * other
 
     def __truediv__(self, other):
         pass

@@ -1,3 +1,12 @@
+"""
+This Python module defines the Value and Tensor Classes for building neural networks
+
+The Value Class describes a scalar value and how it interacts with other Value objects
+and non-Value numeric objects (ie integer and float)
+
+The Tensor Class describes
+"""
+
 import math as m
 
 class Value:
@@ -45,7 +54,7 @@ class Value:
 
     def __mul__(self, other):
         """
-        Returns the output of the multiplication between Value objects and other constants
+        Returns the output of a multiplication between Value objects and other constants
 
         Args:
             other: Defines the other operand in the expression
@@ -57,10 +66,10 @@ class Value:
 
     def __pow__(self, other):
         """
-        Returns the output of the Value object to the power of an integer/float constant
+        Returns the output of a Value object to the power of an integer/float constant
 
         Args:
-            other: Defines the power of the Value object
+            other: Defines the power of a Value object
         """
         if not isinstance(other, (int, float)):
             raise TypeError("Must be an integer or float")
@@ -70,22 +79,22 @@ class Value:
 
     def __neg__(self):
         """
-        Returns the negative of the Value object
+        Returns the negative of a Value object
         """
         return self * -1
 
     def __sub__(self, other):
         """
-        Returns the output of the subtraction between Value objects and other constants
+        Returns the output of a subtraction between Value objects and other constants
 
         Args:
-            other: Defines the power of the Value object
+            other: Defines the power of a Value object
         """
         return self + (-other)
     
     def sigmoid(self):
         """
-        Returns the sigmoid of the Value object
+        Returns the sigmoid of a Value object
         """
         out = Value(1 / (1 + (m.e ** -self.data)), (self,), 'sigmoid')
 
@@ -93,7 +102,7 @@ class Value:
 
     def tanh(self):
         """
-        Returns the tanh of the Value object
+        Returns the tanh of a Value object
         """
         out = Value(2*(2*self).sigmoid().data - 1, (self,), 'tanh')
 
@@ -101,7 +110,7 @@ class Value:
     
     def exp(self):
         """
-        Returns the exponential of the Value object
+        Returns the exponential of a Value object
         """
         out = Value(m.e ** self.data, (self,), 'exp')
 
@@ -117,19 +126,49 @@ class Value:
         return out
 
     def __rsub__(self, other):
-        pass
+        """
+        Returns the output of subtraction when operands are reversed
+
+        Args:
+            other: Defines the other operand in the expression
+        """
+        return other + (-self)
 
     def __radd__(self, other):
-        pass
+        """
+        Returns the output of addition when operands are reversed
+
+        Args:
+            other: Defines the other operand in the expression
+        """
+        return other + self
 
     def __rmul__(self, other):
-        return self * other
+        """
+        Returns the output of multiplication when operands are reversed
+
+        Args:
+            other: Defines the other operand in the expression
+        """
+        return  other * self
 
     def __truediv__(self, other):
-        pass
+        """
+        Returns the output of a Value object divided by another constant
+
+        Args:
+            other: Defines the other operand in the expression
+        """
+        return self * (other ** -1)
 
     def __rtruediv__(self, other):
-        pass
+        """
+        Returns the output of division when operands are reversed
+
+        Args:
+            other: Defines the other operand in the expression
+        """
+        return other * (self ** -1)
 
     def __repr__(self):
         return f"Value(data={self.data},grad={self.grad})"

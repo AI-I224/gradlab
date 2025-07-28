@@ -1,5 +1,5 @@
 """
-This PyTest module tests the methods within the Value Class
+This PyTest module tests the methods within the Value & Tensor Class
 
 To run tests, run the following line of code in the terminal:
     'python -m pytest'
@@ -8,16 +8,6 @@ To run tests, run the following line of code in the terminal:
 import pytest
 import numpy as np
 from core.engine import Value
-
-# @pytest.fixture(name="A")
-# def a_value():
-#     a = Value(2.0)
-#     return a
-
-# @pytest.fixture(name="B")
-# def b_value():
-#     b = Value(3.0)
-#     return b
 
 A = 2.0
 B = 3.0
@@ -29,7 +19,7 @@ X = Value(B)
 Y = Value(C)
 Z = Value(D)
 
-TOL = 1e07
+TOL = 1e-07 # Tolerance to check results are accurate within the 
 
 def test_add():
     c = W + X

@@ -23,11 +23,17 @@ TOL = 1e-07 # Tolerance to check results are accurate within the
 
 def test_add():
     c = W + X
-    assert c.data == A + B, "Operands do not add up correctly"
+    d = X + W
+    e = A + X
+    f = W + B
+    assert c.data == d.data == e.data == f.data == A + B, "Operands do not add up correctly"
 
 def test_mul():
     c = W * X
-    assert c.data == A * B, "Operands do not multiply correctly"
+    d = X * W
+    e = A * X
+    f = W * B
+    assert c.data == d.data == e.data == f.data == A * B, "Operands do not multiply correctly"
 
 @pytest.mark.parametrize("base, exponent", [
     (W, A),
@@ -43,7 +49,15 @@ def test_neg():
 
 def test_sub():
     c = W - X
-    assert c.data == A - B, "Output doesn't subtract correctly"
+    d = A - X
+    e = W - B
+    assert c.data == d.data == e.data == A - B, "Output doesn't subtract correctly"
+
+def test_rsub():
+    c = X - W
+    d = X - A
+    e = B - W
+    assert c.data == d.data == e.data == B - A, "Output doesn't subtract correctly"
 
 def test_exp():
     c = W.exp()
@@ -59,8 +73,8 @@ def test_sigmoid():
 
 def test_relu_greaterthanzero():
     c = W.relu()
-    assert c.data == A, "Output doesn't match ReLU of A"
+    assert c.data == A, "Output doesn't match original value"
 
 def test_relu_lessthanzero():
     c = Y.relu()
-    assert not c.data, "Output doesn't match ReLU of C"
+    assert not c.data, "Output doesn't equal 0"

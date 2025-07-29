@@ -61,33 +61,42 @@ def test_neg():
 
 def test_sub():
     """
-    Tests that Value objects can be subtracted by other Value objects, integers and floats.
+    Tests that Value objects can be subtracted by and from other Value objects, integers and floats.
     """
     c = W - X
     d = A - X
     e = W - B
     assert c.data == d.data == e.data == A - B, "Output doesn't subtract correctly"
 
+def test_truediv():
+    """
+    Tests that Value objects can be divided by and from other Value objects, integers and floats.
+    """
+    c = W / X
+    d = A / X
+    e = W / B
+    assert c.data == d.data == e.data == A / B, "Operands do not divide correctly"
+
 def test_exp():
     """
     Tests that Value objects can be used as an exponent of e.
     """
     c = W.exp()
-    assert abs(c.data - np.exp(A)) < TOL, "Output doesn't match exponential of A"
+    assert abs(c.data - np.exp(A)) < TOL, "Output doesn't produce the correct output of exponential of A"
 
 def test_tanh():
     """
     Tests that .tanh() returns the output of the Value object used in the tanh function.
     """
     c = W.tanh()
-    assert abs(c.data - np.tanh(A)) < TOL, "Output doesn't match tanh(A)"
+    assert abs(c.data - np.tanh(A)) < TOL, "Output doesn't produce the correct output of tanh()"
 
 def test_sigmoid():
     """
     Tests that .sigmoid() returns the output of the Value object used in the sigmoid function.
     """
     c = W.sigmoid()
-    assert abs(c.data - 1/(1 + np.exp(-A))) < TOL, "Output doesn't match sigmoid(A)"
+    assert abs(c.data - 1/(1 + np.exp(-A))) < TOL, "Output doesn't produce the correct output of sigmoid()"
 
 def test_relu_greaterthanzero():
     """

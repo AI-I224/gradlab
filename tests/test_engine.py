@@ -29,7 +29,7 @@ def test_add():
     d = X + W
     e = A + X
     f = W + B
-    assert c.data == d.data == e.data == f.data == A + B, "Operands do not add up correctly"
+    assert c.data == d.data == e.data == f.data == A + B, "Returns incorrect output of addition"
 
 def test_mul():
     """
@@ -39,7 +39,7 @@ def test_mul():
     d = X * W
     e = A * X
     f = W * B
-    assert c.data == d.data == e.data == f.data == A * B, "Operands do not multiply correctly"
+    assert c.data == d.data == e.data == f.data == A * B, "Returns incorrect output of multiplication"
 
 @pytest.mark.parametrize("base, exponent", [
     (W, A),
@@ -50,14 +50,14 @@ def test_pow(base, exponent):
     Tests that Value objects can have an exponent using integers and floats.
     """
     c = base ** exponent
-    assert c.data == A ** exponent, "Output doesn't match the Value to the correct exponent"
+    assert c.data == A ** exponent, "Returns incorrect output of exponentiation"
 
 def test_neg():
     """
     Tests that Value objects have negative/reverse signs.
     """
     c = -W
-    assert c.data == -A, "Output doesn't change sign"
+    assert c.data == -A, "Returns incorrect sign of Value object"
 
 def test_sub():
     """
@@ -66,7 +66,7 @@ def test_sub():
     c = W - X
     d = A - X
     e = W - B
-    assert c.data == d.data == e.data == A - B, "Output doesn't subtract correctly"
+    assert c.data == d.data == e.data == A - B, "Returns incorrect output of subtraction"
 
 def test_truediv():
     """
@@ -75,28 +75,28 @@ def test_truediv():
     c = W / X
     d = A / X
     e = W / B
-    assert c.data == d.data == e.data == A / B, "Operands do not divide correctly"
+    assert c.data == d.data == e.data == A / B, "Returns incorrect output of division"
 
 def test_exp():
     """
     Tests that Value objects can be used as an exponent of e.
     """
     c = W.exp()
-    assert abs(c.data - np.exp(A)) < TOL, "Output doesn't produce the correct output of exponential of A"
+    assert abs(c.data - np.exp(A)) < TOL, "Returns incorrect output of exponential"
 
 def test_tanh():
     """
     Tests that .tanh() returns the output of the Value object used in the tanh function.
     """
     c = W.tanh()
-    assert abs(c.data - np.tanh(A)) < TOL, "Output doesn't produce the correct output of tanh()"
+    assert abs(c.data - np.tanh(A)) < TOL, "Returns incorrect output of tanh()"
 
 def test_sigmoid():
     """
     Tests that .sigmoid() returns the output of the Value object used in the sigmoid function.
     """
     c = W.sigmoid()
-    assert abs(c.data - 1/(1 + np.exp(-A))) < TOL, "Output doesn't produce the correct output of sigmoid()"
+    assert abs(c.data - 1/(1 + np.exp(-A))) < TOL, "Returns incorrect output of sigmoid()"
 
 def test_relu_greaterthanzero():
     """
@@ -104,7 +104,7 @@ def test_relu_greaterthanzero():
     when the Value object is greater than zero.
     """
     c = W.relu()
-    assert c.data == A, "Output doesn't match original value"
+    assert c.data == A, "Does not return input Value"
 
 def test_relu_lessthanzero():
     """
@@ -112,4 +112,4 @@ def test_relu_lessthanzero():
     when the Value object is less than zero.
     """
     c = Y.relu()
-    assert not c.data, "Output doesn't equal 0"
+    assert not c.data, "Does not return zero"

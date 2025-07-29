@@ -169,6 +169,20 @@ class Value:
         out = Value(self.data, (self,), 'relu')
 
         return out
+    
+    def backward(self):
+        """
+        Propagates through the gradients backward from output to input,
+        updating the gradient for each Value,
+        and returns the gradient of the output with respect to the selected Value
+
+        For example:
+        x = a * b
+
+        x._backward() = 1
+        a._backward() = dy/da = b
+        b._backward() = dy/db = a
+        """
 
     def __repr__(self):
         return f"Value(data={self.data},grad={self.grad})"

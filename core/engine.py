@@ -100,39 +100,6 @@ class Value:
             other: Defines the other operand in the expression
         """
         return self * (other ** -1)
-    
-    def sigmoid(self):
-        """
-        Returns the sigmoid of a Value object
-        """
-        out = Value(1 / (1 + (m.e ** -self.data)), (self,), 'sigmoid')
-
-        return out
-
-    def tanh(self):
-        """
-        Returns the tanh of a Value object
-        """
-        out = Value(2*(2*self).sigmoid().data - 1, (self,), 'tanh')
-
-        return out
-    
-    def exp(self):
-        """
-        Returns the exponential of a Value object
-        """
-        out = Value(m.e ** self.data, (self,), 'exp')
-
-        return out
-    
-    def relu(self):
-        """
-        Returns the ReLU of Value object
-        """
-        self.data = self.data if self.data > 0 else 0
-        out = Value(self.data, (self,), 'relu')
-
-        return out
 
     def __rsub__(self, other):
         """
@@ -169,6 +136,39 @@ class Value:
             other: Defines the other operand in the expression
         """
         return other * (self ** -1)
+    
+    def sigmoid(self):
+        """
+        Returns the sigmoid of a Value object
+        """
+        out = Value(1 / (1 + (m.e ** -self.data)), (self,), 'sigmoid')
+
+        return out
+
+    def tanh(self):
+        """
+        Returns the tanh of a Value object
+        """
+        out = Value(2*(2*self).sigmoid().data - 1, (self,), 'tanh')
+
+        return out
+    
+    def exp(self):
+        """
+        Returns the exponential of a Value object
+        """
+        out = Value(m.e ** self.data, (self,), 'exp')
+
+        return out
+    
+    def relu(self):
+        """
+        Returns the ReLU of Value object
+        """
+        self.data = self.data if self.data > 0 else 0
+        out = Value(self.data, (self,), 'relu')
+
+        return out
 
     def __repr__(self):
         return f"Value(data={self.data},grad={self.grad})"

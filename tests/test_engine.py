@@ -84,19 +84,19 @@ def test_exp():
     c = W.exp()
     assert abs(c.data - np.exp(A)) < TOL, "Returns incorrect output of exponential"
 
-def test_tanh():
-    """
-    Tests that .tanh() returns the output of the Value object used in the tanh function.
-    """
-    c = W.tanh()
-    assert abs(c.data - np.tanh(A)) < TOL, "Returns incorrect output of tanh()"
-
 def test_sigmoid():
     """
     Tests that .sigmoid() returns the output of the Value object used in the sigmoid function.
     """
     c = W.sigmoid()
     assert abs(c.data - 1/(1 + np.exp(-A))) < TOL, "Returns incorrect output of sigmoid()"
+
+def test_tanh():
+    """
+    Tests that .tanh() returns the output of the Value object used in the tanh function.
+    """
+    c = W.tanh()
+    assert abs(c.data - np.tanh(A)) < TOL, "Returns incorrect output of tanh()"
 
 def test_relu_greaterthanzero():
     """
@@ -113,3 +113,33 @@ def test_relu_lessthanzero():
     """
     c = Y.relu()
     assert not c.data, "Does not return zero"
+
+def test_backward_add():
+    pass
+
+def test_backward_mul():
+    pass
+
+def test_backward_pow():
+    pass
+
+def test_backward_neg():
+    pass
+
+def test_backward_sub():
+    pass
+
+def test_backward_truediv():
+    pass
+
+def test_backward_exp():
+    pass
+
+def test_backward_tanh():
+    pass
+
+def test_backward_sigmoid():
+    pass
+
+def test_backward_relu():
+    pass

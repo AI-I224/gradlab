@@ -136,7 +136,15 @@ class Value:
             other: Defines the other operand in the expression
         """
         return other * (self ** -1)
-    
+     
+    def exp(self):
+        """
+        Returns the exponential of a Value object
+        """
+        out = Value(m.e ** self.data, (self,), 'exp')
+
+        return out
+   
     def sigmoid(self):
         """
         Returns the sigmoid of a Value object
@@ -150,14 +158,6 @@ class Value:
         Returns the tanh of a Value object
         """
         out = Value(2*(2*self).sigmoid().data - 1, (self,), 'tanh')
-
-        return out
-    
-    def exp(self):
-        """
-        Returns the exponential of a Value object
-        """
-        out = Value(m.e ** self.data, (self,), 'exp')
 
         return out
     

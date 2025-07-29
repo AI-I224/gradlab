@@ -91,6 +91,15 @@ class Value:
             other: Defines the power of a Value object
         """
         return self + (-other)
+
+    def __truediv__(self, other):
+        """
+        Returns the output of a Value object divided by another constant
+
+        Args:
+            other: Defines the other operand in the expression
+        """
+        return self * (other ** -1)
     
     def sigmoid(self):
         """
@@ -151,15 +160,6 @@ class Value:
             other: Defines the other operand in the expression
         """
         return  self * other
-
-    def __truediv__(self, other):
-        """
-        Returns the output of a Value object divided by another constant
-
-        Args:
-            other: Defines the other operand in the expression
-        """
-        return self * (other ** -1)
 
     def __rtruediv__(self, other):
         """

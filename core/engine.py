@@ -141,7 +141,7 @@ class Value:
         Args:
             other: Defines the other operand in the expression
         """
-        return other + self
+        return self + other
 
     def __rmul__(self, other):
         """
@@ -150,7 +150,7 @@ class Value:
         Args:
             other: Defines the other operand in the expression
         """
-        return  other * self
+        return  self * other
 
     def __truediv__(self, other):
         """

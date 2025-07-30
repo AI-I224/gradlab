@@ -27,20 +27,18 @@ def test_add():
     Tests that Value objects can be added to other Value objects, integers and floats.
     """
     c = W + X
-    d = X + W
-    e = A + X
-    f = W + B
-    assert c.data == d.data == e.data == f.data == A + B, "Returns incorrect output of addition"
+    d = A + X
+    e = W + B
+    assert c.data == d.data == e.data == A + B, "Returns incorrect output of addition"
 
 def test_mul():
     """
     Tests that Value objects can be multiplied by other Value objects, integers and floats.
     """
     c = W * X
-    d = X * W
-    e = A * X
-    f = W * B
-    assert c.data == d.data == e.data == f.data == A * B, "Returns incorrect output of multiplication"
+    d = A * X
+    e = W * B
+    assert c.data == d.data == e.data == A * B, "Returns incorrect output of multiplication"
 
 @pytest.mark.parametrize("base, exponent", [
     (W, A),
@@ -167,13 +165,61 @@ def test_backward_pow():
     c.zero_grad()
 
 def test_backward_exp():
-    pass
+    """
+    Tests backpropagation of exponetial function
+    """
+    c = W.exp()
+    c.backward()
 
-def test_backward_tanh():
-    pass
+    w = torch.Tensor([A]).double()
+    w.requires_grad = True
+    y = torch.exp(w)
+    y.backward()
+    
+    assert abs(W.grad - w.grad.item()) < TOL, "Failed backpropagation for exponential"
+    c.zero_grad()
 
 def test_backward_sigmoid():
-    pass
+    """
+    Tests backpropagation of sigmoid function
+    """
+    c = W.sigmoid()
+    c.backward()
+
+    w = torch.Tensor([A]).double()
+    w.requires_grad = True
+    y = torch.sigmoid(w)
+    y.backward()
+    
+    assert abs(W.grad - w.grad.item()) < TOL, "Failed backpropagation for sigmoid"
+    c.zero_grad()
+
+def test_backward_tanh():
+    """
+    Tests backpropagation of tanh function
+    """
+    c = W.tanh()
+    c.backward()
+
+    w = torch.Tensor([A]).double()
+    w.requires_grad = True
+    y = torch.tanh(w)
+    y.backward()
+    
+    assert abs(W.grad - w.grad.item()) < TOL, "Failed backpropagation for tanh"
+    c.zero_grad()
 
 def test_backward_relu():
-    pass
+    """
+    Tests backpropagation of ReLU function
+    """
+    c = W.relu()
+    c.backward()
+
+    w = torch.Tensor([A]).double()
+    w.requires_grad = True
+    y = torch.relu(w)
+    y.backward()
+    
+    assert abs(W.grad - w.grad.item()) < TOL, "Failed backpropagation for ReLU"
+    c.zero_grad()

@@ -37,6 +37,18 @@ class Value:
         self._prev = set(_inputs)
         self._op = _op
     
+    def backprop(self):
+        """
+        Helper function to call _backward without raising Pylint
+        """
+        return self._backward()
+    
+    def inputs(self):
+        """
+        Helper function to call _prev without raising Pylint
+        """
+        return self._prev
+    
     def __add__(self, other):
         """
         Returns the output of the addition between Value objects and other constants
@@ -183,6 +195,22 @@ class Value:
         a._backward() = dy/da = b
         b._backward() = dy/db = a
         """
+        topo = []
+        visited = set()
+
+        # Use topological sorting to build DAG and correctly compute gradients
+        def build_topo(value):
+            if value not in visited:
+                visited.add(value)
+                for i in value.inputs:
+                    build_topo(i)
+                topo.append(value)
+        
+        build_topo(self)
+
+        self.grad = 1 # Set the final output gradient to 1
+        for value in reversed(topo):
+            value.backprop()
 
     def __repr__(self):
         return f"Value(data={self.data},grad={self.grad})"

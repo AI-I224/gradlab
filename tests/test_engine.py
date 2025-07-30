@@ -130,6 +130,7 @@ def test_backward_add():
     y.backward()
     
     assert W.grad == w.grad.item(), "Failed backpropagation for addition"
+    c.zero_grad() # Resets gradients in the DAG to allow Values to be reused across tests
 
 def test_backward_mul():
     """

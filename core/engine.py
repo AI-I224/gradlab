@@ -192,7 +192,11 @@ class Value:
         out = Value(m.e ** self.data, (self,), 'exp')
 
         def _backward():
-            pass
+            """
+            Returns the local gradient contribution 
+            """
+            self.grad += (m.e ** self.data) * out.grad
+        out._backward = _backward
 
         return out
    
@@ -200,10 +204,15 @@ class Value:
         """
         Returns the sigmoid of a Value object
         """
-        out = Value(1 / (1 + (m.e ** -self.data)), (self,), 'sigmoid')
+        sigmoid = 1 / (1 + (m.e ** -self.data))
+        out = Value(sigmoid, (self,), 'sigmoid')
 
         def _backward():
-            pass
+            """
+            Returns the local gradient contribution 
+            """
+            self.grad += (sigmoid * (1 - sigmoid)) * out.grad
+        out._backward = _backward
 
         return out
 
@@ -211,10 +220,15 @@ class Value:
         """
         Returns the tanh of a Value object
         """
-        out = Value(2*(2*self).sigmoid().data - 1, (self,), 'tanh')
+        tanh = 2*(2*self).sigmoid().data - 1
+        out = Value(tanh, (self,), 'tanh')
 
         def _backward():
-            pass
+            """
+            Returns the local gradient contribution 
+            """
+            self.grad += (1 - (tanh ** 2)) * out.grad
+        out._backward = _backward
 
         return out
     
@@ -226,7 +240,11 @@ class Value:
         out = Value(self.data, (self,), 'relu')
 
         def _backward():
-            pass
+            """
+            Returns the local gradient contribution 
+            """
+            self.grad += (1 if self.data > 0 else 0) * out.grad
+        out._backward = _backward
 
         return out
     

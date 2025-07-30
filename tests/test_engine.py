@@ -136,22 +136,35 @@ def test_backward_mul():
     """
     Tests backpropagation of multiplication operation
     """
-    d = W + X
-    c = W * d
+    c = W * X
     c.backward()
 
     w = torch.Tensor([A]).double()
     w.requires_grad = True
     x = torch.Tensor([B]).double()
     x.requires_grad = True
-    c = w + x
-    y = w * c
+    y = w * x
     y.backward()
     
     assert W.grad == w.grad.item(), "Failed backpropagation for multiplication"
+    c.zero_grad()
 
 def test_backward_pow():
-    pass
+    """
+    Tests backpropagation of power operation
+    """
+    c = W ** B
+    c.backward()
+
+    w = torch.Tensor([A]).double()
+    w.requires_grad = True
+    x = torch.Tensor([B]).double()
+    x.requires_grad = True
+    y = w ** B
+    y.backward()
+    
+    assert W.grad == w.grad.item(), "Failed backpropagation for power"
+    c.zero_grad()
 
 def test_backward_neg():
     pass

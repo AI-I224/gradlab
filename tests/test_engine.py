@@ -166,15 +166,6 @@ def test_backward_pow():
     assert W.grad == w.grad.item(), "Failed backpropagation for power"
     c.zero_grad()
 
-def test_backward_neg():
-    pass
-
-def test_backward_sub():
-    pass
-
-def test_backward_truediv():
-    pass
-
 def test_backward_exp():
     pass
 

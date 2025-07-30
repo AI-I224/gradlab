@@ -7,6 +7,7 @@ To run tests, run the following line of code in the terminal:
 
 import pytest
 import numpy as np
+import torch
 from core.engine import Value
 
 A = 2.0
@@ -115,10 +116,38 @@ def test_relu_lessthanzero():
     assert not c.data, "Does not return zero"
 
 def test_backward_add():
-    pass
+    """
+    Tests backpropagation of addition operation
+    """
+    c = W + X
+    c.backward()
+
+    w = torch.Tensor([A]).double()
+    w.requires_grad = True
+    x = torch.Tensor([B]).double()
+    x.requires_grad = True
+    y = w + x
+    y.backward()
+    
+    assert W.grad == w.grad.item(), "Failed backpropagation for addition"
 
 def test_backward_mul():
-    pass
+    """
+    Tests backpropagation of multiplication operation
+    """
+    d = W + X
+    c = W * d
+    c.backward()
+
+    w = torch.Tensor([A]).double()
+    w.requires_grad = True
+    x = torch.Tensor([B]).double()
+    x.requires_grad = True
+    c = w + x
+    y = w * c
+    y.backward()
+    
+    assert W.grad == w.grad.item(), "Failed backpropagation for multiplication"
 
 def test_backward_pow():
     pass

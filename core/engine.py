@@ -257,5 +257,20 @@ class Value:
         for value in reversed(topo):
             value.backprop()
 
+    def zero_grad(self):
+        """
+        Resets the gradient of the Value object to 0
+        """
+        visited = set()
+
+        def _reset(value):
+            if value not in visited:
+                visited.add(value)
+                value.grad = 0
+                for i in value.inputs():
+                    _reset(i)
+        
+        _reset(self)
+
     def __repr__(self):
         return f"Value(data={self.data},grad={self.grad})"

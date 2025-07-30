@@ -223,3 +223,28 @@ def test_backward_relu():
     
     assert abs(W.grad - w.grad.item()) < TOL, "Failed backpropagation for ReLU"
     c.zero_grad()
+
+def test_backward_multi_ops():
+    """
+    Tests backpropagation for multiple operations
+    """
+    c = W * X
+    d = c ** B
+    e = d - W
+    f = e.relu()
+    g = (f ** 2) + (4 * d)
+    g.backward()
+
+    w = torch.Tensor([A]).double()
+    w.requires_grad = True
+    x = torch.Tensor([B]).double()
+    x.requires_grad = True
+    l = w * x
+    m = l ** B
+    n = m - w
+    o = torch.relu(n)
+    p = (o ** 2) + (4 * m)
+    p.backward()
+    
+    assert abs(W.grad - w.grad.item()) < TOL, "Failed backpropagation for multiple operations"
+    c.zero_grad()

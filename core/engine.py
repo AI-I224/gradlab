@@ -117,10 +117,6 @@ class Value:
         """
         Returns the negative of a Value object
         """
-
-        def _backward():
-            pass
-
         return self * -1
 
     def __sub__(self, other):
@@ -130,10 +126,6 @@ class Value:
         Args:
             other: Defines the power of a Value object
         """
-
-        def _backward():
-            pass
-
         return self + (-other)
 
     def __truediv__(self, other):
@@ -143,10 +135,6 @@ class Value:
         Args:
             other: Defines the other operand in the expression
         """
-
-        def _backward():
-            pass
-
         return self * (other ** -1)
 
     def __rsub__(self, other):

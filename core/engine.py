@@ -66,6 +66,7 @@ class Value:
             """
             Returns the local gradient contribution 
             """
+            # Multiply local gradient, dout/dself & dout/dother by incoming gradient, dL/dout
             self.grad += 1 * out.grad
             other.grad += 1 * out.grad
         out._backward = _backward
@@ -86,7 +87,6 @@ class Value:
             """
             Returns the local gradient contribution 
             """
-            # Multiply local gradient, dout/dself & dout/dother by incoming gradient, dL/dout
             self.grad += other.data * out.grad
             other.grad += self.data * out.grad
         out._backward = _backward
@@ -105,7 +105,11 @@ class Value:
         out = Value(self.data ** other, (self,), f'**{other}')
 
         def _backward():
-            pass
+            """
+            Returns the local gradient contribution 
+            """
+            self.grad += (other * (self.data ** (other - 1))) * out.grad
+        out._backward = _backward
 
         return out
 

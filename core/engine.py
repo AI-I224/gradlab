@@ -62,6 +62,14 @@ class Value:
         other = other if isinstance(other, Value) else Value(other)
         out = Value(self.data + other.data, (self, other), '+')
 
+        def _backward():
+            """
+            Returns the local gradient contribution 
+            """
+            self.grad += 1 * out.grad
+            other.grad += 1 * out.grad
+        out._backward = _backward
+
         return out
 
     def __mul__(self, other):
@@ -73,6 +81,15 @@ class Value:
         """
         other = other if isinstance(other, Value) else Value(other)
         out = Value(self.data * other.data, (self, other), '*')
+
+        def _backward():
+            """
+            Returns the local gradient contribution 
+            """
+            # Multiply local gradient, dout/dself & dout/dother by incoming gradient, dL/dout
+            self.grad += other.data * out.grad
+            other.grad += self.data * out.grad
+        out._backward = _backward
 
         return out
 
@@ -87,12 +104,19 @@ class Value:
             raise TypeError("Must be an integer or float")
         out = Value(self.data ** other, (self,), f'**{other}')
 
+        def _backward():
+            pass
+
         return out
 
     def __neg__(self):
         """
         Returns the negative of a Value object
         """
+
+        def _backward():
+            pass
+
         return self * -1
 
     def __sub__(self, other):
@@ -102,6 +126,10 @@ class Value:
         Args:
             other: Defines the power of a Value object
         """
+
+        def _backward():
+            pass
+
         return self + (-other)
 
     def __truediv__(self, other):
@@ -111,6 +139,10 @@ class Value:
         Args:
             other: Defines the other operand in the expression
         """
+
+        def _backward():
+            pass
+
         return self * (other ** -1)
 
     def __rsub__(self, other):
@@ -155,6 +187,9 @@ class Value:
         """
         out = Value(m.e ** self.data, (self,), 'exp')
 
+        def _backward():
+            pass
+
         return out
    
     def sigmoid(self):
@@ -162,6 +197,9 @@ class Value:
         Returns the sigmoid of a Value object
         """
         out = Value(1 / (1 + (m.e ** -self.data)), (self,), 'sigmoid')
+
+        def _backward():
+            pass
 
         return out
 
@@ -171,6 +209,9 @@ class Value:
         """
         out = Value(2*(2*self).sigmoid().data - 1, (self,), 'tanh')
 
+        def _backward():
+            pass
+
         return out
     
     def relu(self):
@@ -179,6 +220,9 @@ class Value:
         """
         self.data = self.data if self.data > 0 else 0
         out = Value(self.data, (self,), 'relu')
+
+        def _backward():
+            pass
 
         return out
     
@@ -190,10 +234,11 @@ class Value:
 
         For example:
         x = a * b
+        x.backward()
 
-        x._backward() = 1
-        a._backward() = dy/da = b
-        b._backward() = dy/db = a
+        x.grad = 1
+        a.grad = dy/da = b
+        b.grad = dy/db = a
         """
         topo = []
         visited = set()
@@ -202,7 +247,7 @@ class Value:
         def build_topo(value):
             if value not in visited:
                 visited.add(value)
-                for i in value.inputs:
+                for i in value.inputs():
                     build_topo(i)
                 topo.append(value)
         

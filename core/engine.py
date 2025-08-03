@@ -126,7 +126,7 @@ class Value:
         Returns the output of subtraction between Value objects and other constants
 
         Args:
-            other: Defines the power of a Value object
+            other: Defines the other operand in the expression
         """
         return self + (-other)
 
@@ -358,21 +358,29 @@ class Tensor:
                      f'**{other}')
 
         return out
+    
+    def __neg__(self):
+        """
+        Returns the element-wise negative of a Tensor object
+        """
+        return self * -1
 
     def __sub__(self, other):
         """
-        Returns the output of element-wise subtraction between Tensor objects and other non-Tensor object arrays
+        Returns the output of element-wise subtraction between Tensor objects
+        and other non-Tensor object arrays
 
         Args:
-            other: Defines the power of a Value object
+            other: Defines the other operand in the expression
         """
+        other = other if isinstance(other, Tensor) else Tensor(other)
         return self + (-other)
 
     def __truediv__(self, other):
         pass
 
     def __rsub__(self, other):
-        pass
+        return other + (-self)
 
     def __radd__(self, other):
         """

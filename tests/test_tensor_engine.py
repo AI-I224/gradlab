@@ -14,6 +14,7 @@ A = [[1, 2], [3, 4]]
 B = [[2, 6], [1, 2]]
 C = 2
 D = -3
+E = [[]]
 
 X = Tensor(A)
 Y = Tensor(B)
@@ -152,17 +153,16 @@ def test_tanh():
     d = torch.tanh(XT)
     assert np.allclose(c.data, d.data, atol=TOL), "Returns incorrect output of tanh()"
 
-def test_relu_greaterthanzero():
+def test_relu():
     """
-    Tests that .relu() returns the output of the Value object used in the relu function
-    when the Value object is greater than zero.
+    Tests that .relu() returns the output of the Tensor object used in the ReLU function.
     """
-    # assert c.data == A, "Does not return input Value"
+    c = X.relu()
+    d = torch.relu(XT)
+    assert np.array_equal(c.data, d.data), "Returns incorrect output of relu()"
 
-def test_relu_lessthanzero():
+def test_softmax():
     """
-    Tests that .relu() returns the output of the Value object used in the relu function
-    when the Value object is less than zero.
+    Tests that .softmax() returns the output of the Tensor object used in the softmax function.
     """
     # assert not c.data, "Does not return zero"
-

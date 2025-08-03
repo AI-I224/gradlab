@@ -434,15 +434,33 @@ class Tensor:
         """
         out = Tensor((self.data.dot(other.data)),
                      self.requires_grad or other.requires_grad,
-                     ".")
+                     (self, other),
+                     "matmul")
         
         return out
 
     def sum(self):
-        pass
+        """
+        Returns the output of the sum value of all elements in the Tensor object
+        """
+        out = Tensor(self.data.sum(),
+                     self.requires_grad,
+                     (self,),
+                     "sum")
+        
+        return out
 
     def mean(self):
-        pass
+        """
+        Returns the output of the mean value of all elements in the Tensor object
+        """
+        out = Tensor(self.data.mean(),
+                     self.requires_grad,
+                     (self,),
+                     "mean")
+        
+        return out
+
 
     def relu(self):
         pass

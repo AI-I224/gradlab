@@ -486,7 +486,7 @@ class Tensor:
 
     def tanh(self):
         """
-        Returns the tanh of a Value object
+        Returns the tanh of a Tensor object
         """
         tanh = 2*(2*self).sigmoid().data - 1
         out = Value(tanh, (self,), 'tanh')
@@ -494,7 +494,15 @@ class Tensor:
         return out
 
     def relu(self):
-        pass
+        """
+        Returns the ReLU of a Tensor object
+        """
+        out = Tensor(np.maximum(0, self.data),
+                     self.requires_grad,
+                     (self,),
+                     'relu')
+        
+        return out
 
     def softmax(self):
         pass

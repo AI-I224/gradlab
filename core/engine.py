@@ -361,7 +361,7 @@ class Tensor:
 
     def __sub__(self, other):
         """
-        Returns the output of subtraction between Tensor objects and other non-Tensor object arrays
+        Returns the output of element-wise subtraction between Tensor objects and other non-Tensor object arrays
 
         Args:
             other: Defines the power of a Value object

@@ -485,7 +485,13 @@ class Tensor:
         return out
 
     def tanh(self):
-        pass
+        """
+        Returns the tanh of a Value object
+        """
+        tanh = 2*(2*self).sigmoid().data - 1
+        out = Value(tanh, (self,), 'tanh')
+
+        return out
 
     def relu(self):
         pass

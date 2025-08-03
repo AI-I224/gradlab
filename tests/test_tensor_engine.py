@@ -12,6 +12,8 @@ from core.engine import Tensor
 
 A = [[1, 2], [3, 4]]
 B = [[2, 0], [1, 2]]
+C = 2
+D = -3
 
 X = Tensor(A)
 Y = Tensor(B)
@@ -28,7 +30,7 @@ TOL = 1e-07 # Tolerance to check results have error smaller than 1e-07
 ])
 def test_add(t1, t2):
     """
-    Tests that Tensor objects can be added element-wise to other Tensor objects.
+    Tests that Tensor objects can be added element-wise to other Tensor and non-Tensor objects.
     """
     c = t1 + t2
     
@@ -42,9 +44,22 @@ def test_add(t1, t2):
 ])
 def test_mul(t1, t2):
     """
-    Tests that Tensor objects can be multiplied element-wise to other Tensor objects.
+    Tests that Tensor objects can be multiplied element-wise to other Tensor and non-Tensor objects.
     """
     c = t1 * t2
 
     d = torch.mul(XT, YT)
     assert np.array_equal(c.data, d.data), "Returns incorrect output of element-wise multiplication"
+
+@pytest.mark.parametrize("base, exponent", [
+    (X, C),
+    (X, D)
+])
+def test_pow(base, exponent):
+    """
+    Tests that Tensor objects can have an exponent using integers and floats.
+    """
+    c = base ** exponent
+
+    d = torch.pow(XT, exponent)
+    assert np.array_equal(c.data, d.data), "Returns incorrect output of element-wise exponentiation"

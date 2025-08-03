@@ -117,7 +117,7 @@ def test_sum():
     c = X.sum()
 
     d = torch.sum(XT)
-    assert np.array_equal(c.data, d.data), "Returns incorrect output of summing elements"
+    assert c.data == d.data, "Returns incorrect output of summing elements"
 
 def test_mean():
     """
@@ -126,7 +126,7 @@ def test_mean():
     c = X.mean()
 
     d = torch.mean(XT)
-    assert np.array_equal(c.data, d.data), "Returns incorrect mean output of elements"
+    assert c.data == d.data, "Returns incorrect mean output of elements"
 
 def test_exp():
     """
@@ -160,8 +160,3 @@ def test_relu():
     d = torch.relu(XT)
     assert np.array_equal(c.data, d.data), "Returns incorrect output of relu()"
 
-def test_softmax():
-    """
-    Tests that .softmax() returns the output of the Tensor object used in the softmax function.
-    """
-    # assert not c.data, "Does not return zero"

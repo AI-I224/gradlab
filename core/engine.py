@@ -461,11 +461,36 @@ class Tensor:
         
         return out
 
+    def exp(self):
+        """
+        Returns the exponential of a Tensor object
+        """
+        out = Tensor(m.e ** self.data,
+                     self.requires_grad,
+                     (self,),
+                     'exp')
+
+        return out
+
+    def sigmoid(self):
+        """
+        Returns the sigmoid of a Tensor object
+        """
+        sigmoid = 1 / (1 + (m.e ** -self.data))
+        out = Tensor(sigmoid,
+                     self.requires_grad,
+                     (self,),
+                     'sigmoid')
+
+        return out
+
+    def tanh(self):
+        pass
 
     def relu(self):
         pass
 
-    def tanh(self):
+    def softmax(self):
         pass
 
     def backward(self):

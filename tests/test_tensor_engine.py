@@ -130,7 +130,7 @@ def test_mean():
 
 def test_exp():
     """
-    Tests that Value objects can be used as an exponent of e.
+    Tests that Tensor objects can be used as an exponent of e.
     """
     c = X.exp()
     d = torch.exp(XT)
@@ -138,7 +138,7 @@ def test_exp():
 
 def test_sigmoid():
     """
-    Tests that .sigmoid() returns the output of the Value object used in the sigmoid function.
+    Tests that .sigmoid() returns the output of the Tensor object used in the sigmoid function.
     """
     c = X.sigmoid()
     d = torch.sigmoid(XT)
@@ -146,9 +146,11 @@ def test_sigmoid():
 
 def test_tanh():
     """
-    Tests that .tanh() returns the output of the Value object used in the tanh function.
+    Tests that .tanh() returns the output of the Tensor object used in the tanh function.
     """
-    # assert abs(c.data - np.tanh(A)) < TOL, "Returns incorrect output of tanh()"
+    c = X.tanh()
+    d = torch.tanh(XT)
+    assert np.allclose(c.data, d.data, atol=TOL), "Returns incorrect output of tanh()"
 
 def test_relu_greaterthanzero():
     """

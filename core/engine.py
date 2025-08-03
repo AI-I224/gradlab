@@ -5,6 +5,7 @@ The Value Class describes a scalar value and how it interacts with other Value o
 and non-Value numeric objects (ie integer and float)
 
 The Tensor Class describes a N-dimensional array and how it  interacts with other Tensor objects
+and non-Tensor objects (ie lists)
 """
 
 import math as m
@@ -286,9 +287,11 @@ class Value:
     def __repr__(self):
         return f"Value(data={self.data},grad={self.grad})"
 
+
 class Tensor:
     """
     Stores a multi-dimensional array and its' gradient, while also determining
+    whether the gradient is calculated
 
     Attributes:
         data: A N-dimensional array
@@ -299,21 +302,46 @@ class Tensor:
         _prev: A set of previous inputs
         _op: A string containing the operation used
     """
-    def __init__(self, data, requires_grad=False, _children=(), _op=''):
+    def __init__(self, data, requires_grad=False, _inputs=(), _op=''):
         if not isinstance(data, np.ndarray):
             data = np.array(data, dtype=np.float32)
         self.data = np.array(data, dtype=np.float32)
         self.requires_grad = requires_grad
         self.grad = np.zeros_like(self.data, dtype=np.float32)
         self._backward = lambda: None
-        self._prev = set(_children)
+        self._prev = set(_inputs)
         self._op = _op
 
     def __add__(self, other):
-        pass
+        """
+        Returns the output of the addition between Tensor objects and other arrays
+
+        Args:
+            other: Defines the other operand in the operation
+        """
+        other = other if isinstance(other, Tensor) else Tensor(other)
+        out = Tensor(self.data + other.data,
+                     (self.requires_grad or other.requires_grad),
+                     (self, other),
+                     '+')
+
+        return out
 
     def __mul__(self, other):
-        pass
+        """
+        Returns the output of the multiplication between Tensor objects and other 
+        non-Tensor object arrays
+
+        Args:
+            other: Defines the other operand in the operation
+        """
+        other = other if isinstance(other, Tensor) else Tensor(other)
+        out = Tensor(self.data * other.data,
+                     (self.requires_grad or other.requires_grad),
+                     (self, other),
+                     '*')
+
+        return out
 
     def __sub__(self, other):
         pass
@@ -322,6 +350,24 @@ class Tensor:
         pass
 
     def pow(self, exponent):
+        pass
+
+    def __rsub__(self, other):
+        pass
+
+    def __radd__(self, other):
+        """
+        Returns the output of addition when operands are reversed
+
+        Args:
+            other: Defines the other operand in the expression
+        """
+        return self + other
+
+    def __rmul__(self, other):
+        pass
+
+    def __rtruediv__(self, other):
         pass
     
     def matmul(self, other):

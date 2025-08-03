@@ -22,7 +22,7 @@ Z = Value(D)
 
 TOL = 1e-07 # Tolerance to check results have error smaller than 1e-07 
 
-def test_add():
+def test_value_add():
     """
     Tests that Value objects can be added to other Value objects, integers and floats.
     """
@@ -31,7 +31,7 @@ def test_add():
     e = W + B
     assert c.data == d.data == e.data == A + B, "Returns incorrect output of addition"
 
-def test_mul():
+def test_value_mul():
     """
     Tests that Value objects can be multiplied by other Value objects, integers and floats.
     """
@@ -44,21 +44,21 @@ def test_mul():
     (W, A),
     (W, C)
 ])
-def test_pow(base, exponent):
+def test_value_pow(base, exponent):
     """
     Tests that Value objects can have an exponent using integers and floats.
     """
     c = base ** exponent
     assert c.data == A ** exponent, "Returns incorrect output of exponentiation"
 
-def test_neg():
+def test_value_neg():
     """
     Tests that Value objects have negative/reverse signs.
     """
     c = -W
     assert c.data == -A, "Returns incorrect sign of Value object"
 
-def test_sub():
+def test_value_sub():
     """
     Tests that Value objects can be subtracted by and from other Value objects, integers and floats.
     """
@@ -67,7 +67,7 @@ def test_sub():
     e = W - B
     assert c.data == d.data == e.data == A - B, "Returns incorrect output of subtraction"
 
-def test_truediv():
+def test_value_truediv():
     """
     Tests that Value objects can be divided by and from other Value objects, integers and floats.
     """
@@ -76,28 +76,28 @@ def test_truediv():
     e = W / B
     assert c.data == d.data == e.data == A / B, "Returns incorrect output of division"
 
-def test_exp():
+def test_value_exp():
     """
     Tests that Value objects can be used as an exponent of e.
     """
     c = W.exp()
     assert abs(c.data - np.exp(A)) < TOL, "Returns incorrect output of exponential"
 
-def test_sigmoid():
+def test_value_sigmoid():
     """
     Tests that .sigmoid() returns the output of the Value object used in the sigmoid function.
     """
     c = W.sigmoid()
     assert abs(c.data - 1/(1 + np.exp(-A))) < TOL, "Returns incorrect output of sigmoid()"
 
-def test_tanh():
+def test_value_tanh():
     """
     Tests that .tanh() returns the output of the Value object used in the tanh function.
     """
     c = W.tanh()
     assert abs(c.data - np.tanh(A)) < TOL, "Returns incorrect output of tanh()"
 
-def test_relu_greaterthanzero():
+def test_value_relu_greaterthanzero():
     """
     Tests that .relu() returns the output of the Value object used in the relu function
     when the Value object is greater than zero.
@@ -105,7 +105,7 @@ def test_relu_greaterthanzero():
     c = W.relu()
     assert c.data == A, "Does not return input Value"
 
-def test_relu_lessthanzero():
+def test_value_relu_lessthanzero():
     """
     Tests that .relu() returns the output of the Value object used in the relu function
     when the Value object is less than zero.
@@ -113,7 +113,7 @@ def test_relu_lessthanzero():
     c = Y.relu()
     assert not c.data, "Does not return zero"
 
-def test_backward_add():
+def test_value_backward_add():
     """
     Tests backpropagation of addition operation
     """
@@ -130,7 +130,7 @@ def test_backward_add():
     assert W.grad == w.grad.item(), "Failed backpropagation for addition"
     c.zero_grad() # Resets gradients in the DAG to allow Values to be reused across tests
 
-def test_backward_mul():
+def test_value_backward_mul():
     """
     Tests backpropagation of multiplication operation
     """
@@ -147,7 +147,7 @@ def test_backward_mul():
     assert W.grad == w.grad.item(), "Failed backpropagation for multiplication"
     c.zero_grad()
 
-def test_backward_pow():
+def test_value_backward_pow():
     """
     Tests backpropagation of power operation
     """
@@ -164,7 +164,7 @@ def test_backward_pow():
     assert W.grad == w.grad.item(), "Failed backpropagation for power"
     c.zero_grad()
 
-def test_backward_exp():
+def test_value_backward_exp():
     """
     Tests backpropagation of exponetial function
     """
@@ -179,7 +179,7 @@ def test_backward_exp():
     assert abs(W.grad - w.grad.item()) < TOL, "Failed backpropagation for exponential"
     c.zero_grad()
 
-def test_backward_sigmoid():
+def test_value_backward_sigmoid():
     """
     Tests backpropagation of sigmoid function
     """
@@ -194,7 +194,7 @@ def test_backward_sigmoid():
     assert abs(W.grad - w.grad.item()) < TOL, "Failed backpropagation for sigmoid"
     c.zero_grad()
 
-def test_backward_tanh():
+def test_value_backward_tanh():
     """
     Tests backpropagation of tanh function
     """
@@ -209,7 +209,7 @@ def test_backward_tanh():
     assert abs(W.grad - w.grad.item()) < TOL, "Failed backpropagation for tanh"
     c.zero_grad()
 
-def test_backward_relu():
+def test_value_backward_relu():
     """
     Tests backpropagation of ReLU function
     """
@@ -224,7 +224,7 @@ def test_backward_relu():
     assert abs(W.grad - w.grad.item()) < TOL, "Failed backpropagation for ReLU"
     c.zero_grad()
 
-def test_backward_multi_ops():
+def test_value_backward_multi_ops():
     """
     Tests backpropagation for multiple operations
     """

@@ -69,7 +69,7 @@ def test_sub():
 
 def test_truediv():
     """
-    Tests that Value objects can be divided by and from other Value objects, integers and floats.
+    Tests that Value objects can be divided by other Value objects, integers and floats.
     """
     c = W / X
     d = A / X

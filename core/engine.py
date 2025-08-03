@@ -123,7 +123,7 @@ class Value:
 
     def __sub__(self, other):
         """
-        Returns the output of a subtraction between Value objects and other constants
+        Returns the output of subtraction between Value objects and other constants
 
         Args:
             other: Defines the power of a Value object
@@ -360,7 +360,13 @@ class Tensor:
         return out
 
     def __sub__(self, other):
-        pass
+        """
+        Returns the output of subtraction between Tensor objects and other non-Tensor object arrays
+
+        Args:
+            other: Defines the power of a Value object
+        """
+        return self + (-other)
 
     def __truediv__(self, other):
         pass
@@ -370,7 +376,7 @@ class Tensor:
 
     def __radd__(self, other):
         """
-        Returns the output of addition when operands are reversed
+        Returns the output of element-wise addition when operands are reversed
 
         Args:
             other: Defines the other operand in the expression
@@ -378,7 +384,13 @@ class Tensor:
         return self + other
 
     def __rmul__(self, other):
-        pass
+        """
+        Returns the output of element-wise multiplication when operands are reversed
+
+        Args:
+            other: Defines the other operand in the expression
+        """
+        return self * other
 
     def __rtruediv__(self, other):
         pass

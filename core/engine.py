@@ -132,7 +132,7 @@ class Value:
 
     def __truediv__(self, other):
         """
-        Returns the output of a Value object divided by another constant
+        Returns the output of a Value object divided by other Value objects, integers and floats
 
         Args:
             other: Defines the other operand in the expression
@@ -377,9 +377,24 @@ class Tensor:
         return self + (-other)
 
     def __truediv__(self, other):
-        pass
+        """
+        Returns the output of a Tensor object divided element-wise by other Tensor objects, 
+        and other non-Tensor object arrays
+
+
+        Args:
+            other: Defines the other operand in the expression
+        """
+        other = other if isinstance(other, Tensor) else Tensor(other)
+        return self * (other ** -1)
 
     def __rsub__(self, other):
+        """
+        Returns the output of element-wise subtraction when operands are reversed
+
+        Args:
+            other: Defines the other operand in the expression
+        """
         return other + (-self)
 
     def __radd__(self, other):
@@ -401,7 +416,13 @@ class Tensor:
         return self * other
 
     def __rtruediv__(self, other):
-        pass
+        """
+        Returns the output of division when operands are reversed
+
+        Args:
+            other: Defines the other operand in the expression
+        """
+        return other * (self ** -1)
     
     def matmul(self, other):
         pass

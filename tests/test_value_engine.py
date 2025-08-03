@@ -1,5 +1,5 @@
 """
-This PyTest module tests the methods within the Value & Tensor Class
+This PyTest module tests the methods within the Value Class
 
 To run tests, run the following line of code in the terminal:
     'python -m pytest'

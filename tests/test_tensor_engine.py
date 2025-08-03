@@ -11,7 +11,7 @@ import torch
 from core.engine import Tensor
 
 A = [[1, 2], [3, 4]]
-B = [[2, 0], [1, 2]]
+B = [[2, 6], [1, 2]]
 C = 2
 D = -3
 
@@ -86,3 +86,17 @@ def test_sub(t1, t2):
 
     d = torch.sub(XT, YT)
     assert np.array_equal(c.data, d.data), "Returns incorrect output of element-wise subtraction"
+
+@pytest.mark.parametrize("t1, t2", [
+    (X, Y),
+    (A, Y),
+    (X, B)
+])
+def test_true_div(t1, t2):
+    """
+    Tests that Tensor objects can be multiplied element-wise to other Tensor and non-Tensor objects.
+    """
+    c = t1 / t2
+
+    d = torch.div(XT, YT)
+    assert np.array_equal(c.data, d.data), "Returns incorrect output of element-wise multiplication"

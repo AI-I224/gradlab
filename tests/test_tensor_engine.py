@@ -63,3 +63,26 @@ def test_pow(base, exponent):
 
     d = torch.pow(XT, exponent)
     assert np.array_equal(c.data, d.data), "Returns incorrect output of element-wise exponentiation"
+
+def test_neg():
+    """
+    Tests that Tensor objects have negative/reverse signs element-wise.
+    """
+    c = -X
+    d = torch.neg(XT)
+    assert np.array_equal(c.data, d.data), "Returns incorrect sign of Tensor object's elements"
+
+@pytest.mark.parametrize("t1, t2", [
+    (X, Y),
+    (A, Y),
+    (X, B)
+])
+def test_sub(t1, t2):
+    """
+    Tests that Tensor objects can be subtracted element-wise
+    by and from other Tensor and non-Tensor objects.
+    """
+    c = t1 - t2
+
+    d = torch.sub(XT, YT)
+    assert np.array_equal(c.data, d.data), "Returns incorrect output of element-wise subtraction"

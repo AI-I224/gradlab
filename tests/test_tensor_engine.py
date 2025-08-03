@@ -94,9 +94,18 @@ def test_sub(t1, t2):
 ])
 def test_true_div(t1, t2):
     """
-    Tests that Tensor objects can be multiplied element-wise to other Tensor and non-Tensor objects.
+    Tests that Tensor objects can be divided element-wise by other Tensor and non-Tensor objects.
     """
     c = t1 / t2
 
     d = torch.div(XT, YT)
-    assert np.array_equal(c.data, d.data), "Returns incorrect output of element-wise multiplication"
+    assert np.array_equal(c.data, d.data), "Returns incorrect output of element-wise division"
+
+def test_matmul():
+    """
+    Tests that Tensor objects can be matrix multiplied to other Tensor objects.
+    """
+    c = X.matmul(Y)
+
+    d = torch.matmul(XT, YT)
+    assert np.array_equal(c.data, d.data), "Returns incorrect output of matrix multiplication"

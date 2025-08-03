@@ -109,3 +109,21 @@ def test_matmul():
 
     d = torch.matmul(XT, YT)
     assert np.array_equal(c.data, d.data), "Returns incorrect output of matrix multiplication"
+
+def test_sum():
+    """
+    Tests that the elements of a Tensor object can be summed together.
+    """
+    c = X.sum()
+
+    d = torch.sum(XT)
+    assert np.array_equal(c.data, d.data), "Returns incorrect output of summing elements"
+
+def test_mean():
+    """
+    Tests that the elements of a Tensor object can be averaged.
+    """
+    c = X.mean()
+
+    d = torch.mean(XT)
+    assert np.array_equal(c.data, d.data), "Returns incorrect mean output of elements"

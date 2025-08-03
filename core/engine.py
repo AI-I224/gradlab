@@ -417,7 +417,7 @@ class Tensor:
 
     def __rtruediv__(self, other):
         """
-        Returns the output of division when operands are reversed
+        Returns the output of element-wise division when operands are reversed
 
         Args:
             other: Defines the other operand in the expression
@@ -425,7 +425,18 @@ class Tensor:
         return other * (self ** -1)
     
     def matmul(self, other):
-        pass
+        """
+        Returns the output of matrix multiplication between Tensor objects
+        and non-Tensor objects
+
+        Args:
+            other: Defines the other operand in the expression
+        """
+        out = Tensor((self.data.dot(other.data)),
+                     self.requires_grad or other.requires_grad,
+                     ".")
+        
+        return out
 
     def sum(self):
         pass

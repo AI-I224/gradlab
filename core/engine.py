@@ -314,7 +314,7 @@ class Tensor:
 
     def __add__(self, other):
         """
-        Returns the output of the addition between Tensor objects and other arrays
+        Returns the output of the element-wise addition between Tensor objects and other arrays
 
         Args:
             other: Defines the other operand in the operation
@@ -329,7 +329,7 @@ class Tensor:
 
     def __mul__(self, other):
         """
-        Returns the output of the multiplication between Tensor objects and other 
+        Returns the output of the element-wise multiplication between Tensor objects and other 
         non-Tensor object arrays
 
         Args:
@@ -342,14 +342,27 @@ class Tensor:
                      '*')
 
         return out
+    
+    def __pow__(self, other):
+        """
+        Returns the output of a Tensor object to the element-wise power of an integer/float constant
+
+        Args:
+            other: Defines the power of a Tensor object
+        """
+        if not isinstance(other, (int, float)):
+            raise TypeError("Must be an integer or float")
+        out = Tensor(self.data ** other,
+                     self.requires_grad,
+                     (self,),
+                     f'**{other}')
+
+        return out
 
     def __sub__(self, other):
         pass
 
     def __truediv__(self, other):
-        pass
-
-    def pow(self, exponent):
         pass
 
     def __rsub__(self, other):

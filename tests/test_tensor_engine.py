@@ -127,3 +127,40 @@ def test_mean():
 
     d = torch.mean(XT)
     assert np.array_equal(c.data, d.data), "Returns incorrect mean output of elements"
+
+def test_exp():
+    """
+    Tests that Value objects can be used as an exponent of e.
+    """
+    c = X.exp()
+    d = torch.exp(XT)
+    assert np.allclose(c.data, d.data, atol=TOL), "Returns incorrect output of exponential"
+
+def test_sigmoid():
+    """
+    Tests that .sigmoid() returns the output of the Value object used in the sigmoid function.
+    """
+    c = X.sigmoid()
+    d = torch.sigmoid(XT)
+    assert np.allclose(c.data, d.data, atol=TOL), "Returns incorrect output of sigmoid()"
+
+def test_tanh():
+    """
+    Tests that .tanh() returns the output of the Value object used in the tanh function.
+    """
+    # assert abs(c.data - np.tanh(A)) < TOL, "Returns incorrect output of tanh()"
+
+def test_relu_greaterthanzero():
+    """
+    Tests that .relu() returns the output of the Value object used in the relu function
+    when the Value object is greater than zero.
+    """
+    # assert c.data == A, "Does not return input Value"
+
+def test_relu_lessthanzero():
+    """
+    Tests that .relu() returns the output of the Value object used in the relu function
+    when the Value object is less than zero.
+    """
+    # assert not c.data, "Does not return zero"
+

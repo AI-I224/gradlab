@@ -4,17 +4,18 @@ This Python module defines the Value and Tensor Classes for building neural netw
 The Value Class describes a scalar value and how it interacts with other Value objects
 and non-Value numeric objects (ie integer and float)
 
-The Tensor Class describes
+The Tensor Class describes a N-dimensional array and how it  interacts with other Tensor objects
 """
 
 import math as m
+import numpy as np
 
 class Value:
     """
     Stores a single scalar value and its' gradient
 
     Attributes:
-        data: The scalar number
+        data: A scalar number
         grad: A float value of the calculated gradient 
         _backward: A nested function to calculate the gradient
         _prev: A set of previous inputs
@@ -239,8 +240,8 @@ class Value:
     def backward(self):
         """
         Propagates through the gradients backward from output to input,
-        updating the gradient for each Value,
-        and returns the gradient of the output with respect to the selected Value
+        updating the gradient for each Value, and returns the gradient
+        of the output with respect to the selected Value
 
         For example:
         x = a * b
@@ -284,3 +285,62 @@ class Value:
 
     def __repr__(self):
         return f"Value(data={self.data},grad={self.grad})"
+
+class Tensor:
+    """
+    Stores a multi-dimensional array and its' gradient, while also determining
+
+    Attributes:
+        data: A N-dimensional array
+        requires_grad: A boolean that decides whether the autograd engine 
+          tracks the Tensor's operations
+        grad: An array of the calculated gradient
+        _backward: A nested function to calculate the gradient
+        _prev: A set of previous inputs
+        _op: A string containing the operation used
+    """
+    def __init__(self, data, requires_grad=False, _children=(), _op=''):
+        if not isinstance(data, np.ndarray):
+            data = np.array(data, dtype=np.float32)
+        self.data = np.array(data, dtype=np.float32)
+        self.requires_grad = requires_grad
+        self.grad = np.zeros_like(self.data, dtype=np.float32)
+        self._backward = lambda: None
+        self._prev = set(_children)
+        self._op = _op
+
+    def __add__(self, other):
+        pass
+
+    def __mul__(self, other):
+        pass
+
+    def __sub__(self, other):
+        pass
+
+    def __truediv__(self, other):
+        pass
+
+    def pow(self, exponent):
+        pass
+    
+    def matmul(self, other):
+        pass
+
+    def sum(self):
+        pass
+
+    def mean(self):
+        pass
+
+    def relu(self):
+        pass
+
+    def tanh(self):
+        pass
+
+    def backward(self):
+        pass
+
+    def __repr__(self):
+        return f"Tensor(data={self.data}, grad={self.grad})"

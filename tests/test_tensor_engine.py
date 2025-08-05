@@ -15,13 +15,15 @@ B = [[2, 6], [1, 2]]
 C = 2
 D = -3
 
-X = Tensor(A)
-Y = Tensor(B)
+X = Tensor(A, requires_grad=True)
+Y = Tensor(B, requires_grad=True)
 
 XT = torch.Tensor(A)
+XT.requires_grad = True
 YT = torch.Tensor(B)
+YT.requires_grad = True
 
-TOL = 1e-07 # Tolerance to check results have error smaller than 1e-07 
+TOL = 1e-07 # Tolerance to check results have error smaller than 1e-07
 
 @pytest.mark.parametrize("t1, t2", [
     (X, Y),
@@ -160,3 +162,29 @@ def test_relu():
     d = torch.relu(XT)
     assert np.array_equal(c.data, d.data), "Returns incorrect output of relu()"
 
+def test_backward_add():
+    """
+    Tests backpropagation of element-wise addition operation
+    """
+    c = X + Y
+    c.backward()
+
+    y = XT + YT
+    y.sum().backward()
+    
+    assert np.array_equal(X.grad, XT.grad), "Failed backpropagation for element-wise addition"
+    c.zero_grad() # Reset gradients
+    XT.grad = None
+    YT.grad = None
+
+def test_backward_mul():
+    """
+    Tests backpropagation of element-wise multiplication operation
+    """
+    m = X * Y
+    m.backward()
+
+    u = XT * YT
+    u.sum().backward()
+    
+    assert np.array_equal(X.grad, XT.grad), "Failed backpropagation for element-wise multiplication"

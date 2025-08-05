@@ -215,3 +215,15 @@ def test_backward_matmul():
     y.sum().backward()
     
     assert np.array_equal(X.grad, XT.grad), "Failed backpropagation for matrix multiplication"
+
+def test_backward_sum():
+    """
+    Tests backpropagation of the sum of all elements inside a Tensor
+    """
+    c = X.sum()
+    c.backward()
+
+    y = XT.sum()
+    y.backward()
+    
+    assert np.array_equal(X.grad, XT.grad), "Failed backpropagation for summing Tensor elements"

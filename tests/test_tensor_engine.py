@@ -275,4 +275,15 @@ def test_backward_tanh():
     y.sum().backward()
     
     assert np.allclose(X.grad, XT.grad, atol=TOL), "Failed backpropagation for tanh"
+
+def test_backward_relu():
+    """
+    Tests backpropagation of the ReLU function
+    """
+    c = X.relu()
+    c.backward()
+
+    y = torch.relu(XT)
+    y.sum().backward()
     
+    assert np.allclose(X.grad, XT.grad, atol=TOL), "Failed backpropagation for ReLU"

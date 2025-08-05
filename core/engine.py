@@ -511,6 +511,11 @@ class Tensor:
                      (self,),
                      "mean")
         
+        def _backward():
+            if self.requires_grad:
+                self.grad += (np.ones_like(self.data) / self.data.size) * out.grad
+        out._backward = _backward
+
         return out
 
     def exp(self):

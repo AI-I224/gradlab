@@ -239,3 +239,15 @@ def test_backward_mean():
     y.backward()
     
     assert np.array_equal(X.grad, XT.grad), "Failed backpropagation for averaging Tensor elements"
+
+def test_backward_exp():
+    """
+    Tests backpropagation of the exponential function
+    """
+    c = X.exp()
+    c.backward()
+
+    y = torch.exp(XT)
+    y.sum().backward()
+    
+    assert np.allclose(X.grad, XT.grad, atol=TOL), "Failed backpropagation for exponential"

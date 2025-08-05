@@ -585,7 +585,12 @@ class Tensor:
                      self.requires_grad,
                      (self,),
                      'relu')
-        
+
+        def _backward():
+            if self.requires_grad:
+                self.grad += (self.data > 0) * out.grad
+        out._backward = _backward
+
         return out
 
     def backward(self):

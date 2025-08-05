@@ -181,10 +181,25 @@ def test_backward_mul():
     """
     Tests backpropagation of element-wise multiplication operation
     """
-    m = X * Y
-    m.backward()
+    c = X * Y
+    c.backward()
 
-    u = XT * YT
-    u.sum().backward()
+    y = XT * YT
+    y.sum().backward()
     
     assert np.array_equal(X.grad, XT.grad), "Failed backpropagation for element-wise multiplication"
+    c.zero_grad()
+    XT.grad = None
+    YT.grad = None
+
+def test_backward_pow():
+    """
+    Tests backpropagation of element-wise exponentiation operation
+    """
+    c = X ** 2
+    c.backward()
+
+    y = XT ** 2
+    y.sum().backward()
+    
+    assert np.array_equal(X.grad, XT.grad), "Failed backpropagation for element-wise exponentiation"

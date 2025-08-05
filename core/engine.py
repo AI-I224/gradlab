@@ -495,6 +495,11 @@ class Tensor:
                      (self,),
                      "sum")
         
+        def _backward():
+            if self.requires_grad:
+                self.grad += np.ones_like(self.data) * out.grad
+        out._backward = _backward
+        
         return out
 
     def mean(self):

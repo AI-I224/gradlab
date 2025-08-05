@@ -388,6 +388,14 @@ class Tensor:
                      self.requires_grad,
                      (self,),
                      f'**{other}')
+        
+        def _backward():
+            """
+            Returns the local gradient contribution 
+            """
+            if self.requires_grad:
+                self.grad += (other * (self.data ** (other - 1))) * out.grad
+        out._backward = _backward
 
         return out
     

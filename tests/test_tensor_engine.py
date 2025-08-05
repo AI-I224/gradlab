@@ -263,4 +263,16 @@ def test_backward_sigmoid():
     y.sum().backward()
     
     assert np.allclose(X.grad, XT.grad, atol=TOL), "Failed backpropagation for sigmoid"
+
+def test_backward_tanh():
+    """
+    Tests backpropagation of the tanh function
+    """
+    c = X.tanh()
+    c.backward()
+
+    y = torch.tanh(XT)
+    y.sum().backward()
+    
+    assert np.allclose(X.grad, XT.grad, atol=TOL), "Failed backpropagation for tanh"
     

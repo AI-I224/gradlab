@@ -227,3 +227,15 @@ def test_backward_sum():
     y.backward()
     
     assert np.array_equal(X.grad, XT.grad), "Failed backpropagation for summing Tensor elements"
+
+def test_backward_mean():
+    """
+    Tests backpropagation of the mean of all elements inside a Tensor
+    """
+    c = X.mean()
+    c.backward()
+
+    y = XT.mean()
+    y.backward()
+    
+    assert np.array_equal(X.grad, XT.grad), "Failed backpropagation for averaging Tensor elements"

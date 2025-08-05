@@ -477,6 +477,13 @@ class Tensor:
                      (self, other),
                      "matmul")
         
+        def _backward():
+            if self.requires_grad:
+                self.grad += out.grad.dot(other.data.T)
+            if other.requires_grad:
+                other.grad += self.data.T.dot(out.grad)
+        out._backward = _backward
+        
         return out
 
     def sum(self):

@@ -251,3 +251,16 @@ def test_backward_exp():
     y.sum().backward()
     
     assert np.allclose(X.grad, XT.grad, atol=TOL), "Failed backpropagation for exponential"
+
+def test_backward_sigmoid():
+    """
+    Tests backpropagation of the sigmoid function
+    """
+    c = X.sigmoid()
+    c.backward()
+
+    y = torch.sigmoid(XT)
+    y.sum().backward()
+    
+    assert np.allclose(X.grad, XT.grad, atol=TOL), "Failed backpropagation for sigmoid"
+    

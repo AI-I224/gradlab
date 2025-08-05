@@ -566,6 +566,14 @@ class Tensor:
                     self.requires_grad,
                     (self,),
                     'tanh')
+        
+        def _backward():
+            """
+            Returns the local gradient contribution 
+            """
+            if self.requires_grad:
+                self.grad += (1 - (tanh ** 2)) * out.grad
+        out._backward = _backward
 
         return out
 

@@ -203,3 +203,15 @@ def test_backward_pow():
     y.sum().backward()
     
     assert np.array_equal(X.grad, XT.grad), "Failed backpropagation for element-wise exponentiation"
+
+def test_backward_matmul():
+    """
+    Tests backpropagation of matrix multiplication
+    """
+    c = X.matmul(Y)
+    c.backward()
+
+    y = XT.matmul(YT)
+    y.sum().backward()
+    
+    assert np.array_equal(X.grad, XT.grad), "Failed backpropagation for matrix multiplication"

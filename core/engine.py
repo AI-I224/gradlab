@@ -306,11 +306,23 @@ class Tensor:
         if not isinstance(data, np.ndarray):
             data = np.array(data, dtype=np.float32)
         self.data = np.array(data, dtype=np.float32)
-        self.requires_grad = requires_grad
+        self.requires_grad = requires_grad # Design choice to save memory and computation time
         self.grad = np.zeros_like(self.data, dtype=np.float32)
         self._backward = lambda: None
         self._prev = set(_inputs)
         self._op = _op
+    
+    def backprop(self):
+        """
+        Helper function to call _backward without raising Pylint
+        """
+        return self._backward()
+    
+    def inputs(self):
+        """
+        Helper function to call _prev without raising Pylint
+        """
+        return self._prev
 
     def __add__(self, other):
         """
@@ -324,6 +336,16 @@ class Tensor:
                      (self.requires_grad or other.requires_grad),
                      (self, other),
                      '+')
+        
+        def _backward():
+            """
+            Returns the local gradient contribution 
+            """
+            if self.requires_grad:
+                self.grad += 1 * out.grad
+            if other.requires_grad:
+                other.grad += 1 * out.grad
+        out._backward = _backward
 
         return out
 
@@ -340,6 +362,16 @@ class Tensor:
                      (self.requires_grad or other.requires_grad),
                      (self, other),
                      '*')
+        
+        def _backward():
+            """
+            Returns the local gradient contribution 
+            """
+            if self.requires_grad:
+                self.grad += other.data * out.grad
+            if other.requires_grad:
+                other.grad += self.data * out.grad
+        out._backward = _backward
 
         return out
     
@@ -508,7 +540,50 @@ class Tensor:
         return out
 
     def backward(self):
-        pass
+        """
+        Propagates through the gradients backward from output to input,
+        updating the gradient of each Tensor, and returns the gradient
+        of the output with respect to the selected Tensor
+
+        For example:
+        x = a * b
+        x.backward()
+
+        x.grad = 1
+        a.grad = dy/da = b
+        b.grad = dy/db = a
+        """
+        topo = []
+        visited = set()
+        
+        def build_topo(v):
+            if v not in visited:
+                visited.add(v)
+                for i in v.inputs():
+                    build_topo(i)
+                topo.append(v)
+
+        build_topo(self)
+
+        # Set the final output gradient to an array of 1s
+        self.grad = np.ones_like(self.data, dtype=np.float32) 
+        for node in reversed(topo):
+            node.backprop()
+
+    def zero_grad(self):
+        """
+        Resets the gradient of the Tensor object to 0
+        """
+        visited = set()
+
+        def _reset(v):
+            if v not in visited:
+                visited.add(v)
+                v.grad = np.zeros_like(self.data, dtype=np.float32)
+                for i in v.inputs():
+                    _reset(i)
+        
+        _reset(self)
 
     def __repr__(self):
         return f"Tensor(data={self.data}, grad={self.grad})"

@@ -203,6 +203,9 @@ def test_backward_pow():
     y.sum().backward()
     
     assert np.array_equal(X.grad, XT.grad), "Failed backpropagation for element-wise exponentiation"
+    c.zero_grad()
+    XT.grad = None
+    YT.grad = None
 
 def test_backward_matmul():
     """
@@ -215,6 +218,9 @@ def test_backward_matmul():
     y.sum().backward()
     
     assert np.array_equal(X.grad, XT.grad), "Failed backpropagation for matrix multiplication"
+    c.zero_grad()
+    XT.grad = None
+    YT.grad = None
 
 def test_backward_sum():
     """
@@ -251,6 +257,9 @@ def test_backward_exp():
     y.sum().backward()
     
     assert np.allclose(X.grad, XT.grad, atol=TOL), "Failed backpropagation for exponential"
+    c.zero_grad()
+    XT.grad = None
+    YT.grad = None
 
 def test_backward_sigmoid():
     """
@@ -263,6 +272,9 @@ def test_backward_sigmoid():
     y.sum().backward()
     
     assert np.allclose(X.grad, XT.grad, atol=TOL), "Failed backpropagation for sigmoid"
+    c.zero_grad()
+    XT.grad = None
+    YT.grad = None
 
 def test_backward_tanh():
     """
@@ -275,6 +287,9 @@ def test_backward_tanh():
     y.sum().backward()
     
     assert np.allclose(X.grad, XT.grad, atol=TOL), "Failed backpropagation for tanh"
+    c.zero_grad()
+    XT.grad = None
+    YT.grad = None
 
 def test_backward_relu():
     """
@@ -287,3 +302,26 @@ def test_backward_relu():
     y.sum().backward()
     
     assert np.allclose(X.grad, XT.grad, atol=TOL), "Failed backpropagation for ReLU"
+    c.zero_grad()
+    XT.grad = None
+    YT.grad = None
+
+def test_backward_multi_ops():
+    """
+    Tests backpropagation for multiple operations
+    """
+    c = X * Y
+    d = c ** D
+    e = d - X
+    f = e.relu()
+    g = (f ** 2) + (4 * d)
+    g.backward()
+
+    l = XT * YT
+    m = l ** D
+    n = m - XT
+    o = torch.relu(n)
+    p = (o ** 2) + (4 * m)
+    p.sum().backward()
+    
+    assert np.allclose(X.grad, XT.grad, atol=TOL), "Failed backpropagation for multiple operations"

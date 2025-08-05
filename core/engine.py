@@ -546,6 +546,14 @@ class Tensor:
                      self.requires_grad,
                      (self,),
                      'sigmoid')
+        
+        def _backward():
+            """
+            Returns the local gradient contribution 
+            """
+            if self.requires_grad:
+                self.grad += (sigmoid * (1 - sigmoid)) * out.grad
+        out._backward = _backward
 
         return out
 

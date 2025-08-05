@@ -588,7 +588,7 @@ class Tensor:
 
         def _backward():
             if self.requires_grad:
-                self.grad += (self.data > 0) * out.grad
+                self.grad += (1 if self.data.all() > 0 else 0) * out.grad
         out._backward = _backward
 
         return out

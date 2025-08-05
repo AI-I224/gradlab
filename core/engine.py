@@ -526,6 +526,14 @@ class Tensor:
                      self.requires_grad,
                      (self,),
                      'exp')
+        
+        def _backward():
+            """
+            Returns the local gradient contribution 
+            """
+            if self.requires_grad:
+                self.grad += (m.e ** self.data) * out.grad
+        out._backward = _backward
 
         return out
 

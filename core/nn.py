@@ -59,8 +59,11 @@ class Linear:
 
 
 class ReLU:
-    def __init__(self):
-        pass
+    """
+    Applies the ReLU activation to the output values from the previous layer
+    """
+    def __call__(self, x: Tensor) -> Tensor:
+        return x.relu()
 
 class Sequential:
     def __init__(self):

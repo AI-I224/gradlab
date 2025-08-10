@@ -32,13 +32,31 @@ class Linear:
     """
     def __init__(self, nin, nout, requires_grad=True):
         self.weight = Tensor(
-            np.random.randn(nin, nout).astype(np.float32) * 0.01,
+            np.random.randn(nout, nin).astype(np.float32) * 0.01,
             requires_grad=requires_grad
         )
         self.bias = Tensor(
             np.zeros((nout, 1), dtype=np.float32),
             requires_grad=requires_grad
         )
+
+    def __call__(self, x: Tensor) -> Tensor:
+        """
+        Makes the Linear object callable
+        """
+        # Explicit shape checks — may implement broadcasting later
+        assert x.data.shape[0] == self.weight.data.shape[1], (
+            f"Shape mismatch: expected input with {self.weight.data.shape[1]} features, "
+            f"got {x.data.shape[0]}"
+        )
+        return self.weight.matmul(x) + self.bias
+
+    def parameters(self):
+        """
+        Returns the weights and biases for each parameter in the layer
+        """
+        return [self.weight, self.bias]
+
 
 class ReLU:
     def __init__(self):

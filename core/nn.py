@@ -19,8 +19,26 @@ class Module:
             p.zero_grad()
 
 class Linear:
-    def __init__(self):
-        pass
+    """
+    Defines a layer within the neural network, performaing a linear transformation of the form:
+
+    y = W * x + b
+
+    Attributes:
+        nin: size of input Tensor
+        nout: size of output Tensor
+        requires_grad: A boolean that decides whether the autograd engine 
+          tracks the Tensors within the layer
+    """
+    def __init__(self, nin, nout, requires_grad=True):
+        self.weight = Tensor(
+            np.random.randn(nin, nout).astype(np.float32) * 0.01,
+            requires_grad=requires_grad
+        )
+        self.bias = Tensor(
+            np.zeros((nout, 1), dtype=np.float32),
+            requires_grad=requires_grad
+        )
 
 class ReLU:
     def __init__(self):

@@ -57,6 +57,26 @@ class Linear:
         """
         return [self.weight, self.bias]
 
+class Exp:
+    """
+    Applies the exponential function to the output values from the previous layer
+    """
+    def __call__(self, x: Tensor) -> Tensor:
+        return x.exp()
+
+class Sigmoid:
+    """
+    Applies the Sigmoid activation to the output values from the previous layer
+    """
+    def __call__(self, x: Tensor) -> Tensor:
+        return x.sigmoid()
+    
+class Tanh:
+    """
+    Applies the Tanh activation to the output values from the previous layer
+    """
+    def __call__(self, x: Tensor) -> Tensor:
+        return x.tanh()
 
 class ReLU:
     """

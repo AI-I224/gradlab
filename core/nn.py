@@ -86,5 +86,9 @@ class ReLU:
         return x.relu()
 
 class Sequential:
-    def __init__(self):
-        pass
+    """
+    Builder class for connecting the layers and activation functions
+    for the neural network
+    """
+    def __init__(self, *layers):
+        self.layers = layers

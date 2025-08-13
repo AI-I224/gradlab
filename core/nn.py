@@ -1,20 +1,8 @@
 """
-This Python module defines the following classes:
+This Python module defines the structure and chaining of different layers
+and activation functions within a neural network, covering the following submodules:
 
-Module: describes a scalar value and how it interacts with other Value objects
-and non-Value numeric objects (ie integer and float)
-
-Linear:
-
-Exp:
-
-Sigmoid:
-
-Tanh:
-
-ReLU:
-
-Sequential:
+Module, Linear, Exp, Sigmoid, Tanh, ReLU, Sequential
 """
 
 import numpy as np

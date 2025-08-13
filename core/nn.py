@@ -1,3 +1,22 @@
+"""
+This Python module defines the following classes:
+
+Module: describes a scalar value and how it interacts with other Value objects
+and non-Value numeric objects (ie integer and float)
+
+Linear:
+
+Exp:
+
+Sigmoid:
+
+Tanh:
+
+ReLU:
+
+Sequential:
+"""
+
 import numpy as np
 from core.engine import Tensor
 
@@ -18,7 +37,7 @@ class Module:
         for p in self.parameters():
             p.zero_grad()
 
-class Linear:
+class Linear(Module):
     """
     Defines a layer within the neural network, performaing a linear transformation of the form:
 
@@ -44,12 +63,22 @@ class Linear:
         """
         Makes the Linear object callable
         """
-        # Explicit shape checks — may implement broadcasting later
+        # Shape check — may implement broadcasting later
         assert x.data.shape[0] == self.weight.data.shape[1], (
-            f"Shape mismatch: expected input with {self.weight.data.shape[1]} features, "
-            f"got {x.data.shape[0]}"
+        f"Shape mismatch: expected input with {self.weight.data.shape[1]} features, "
+        f"got {x.data.shape[0]}"
         )
-        return self.weight.matmul(x) + self.bias
+
+        out = self.weight.matmul(x)
+
+        # Expand bias across batch dimension
+        batch_size = x.data.shape[1]
+        bias_expanded = Tensor(
+            np.repeat(self.bias.data, batch_size, axis=1),
+            requires_grad=self.bias.requires_grad
+        )
+
+        return out + bias_expanded # Add bias explicitly without relying on broadcasting
 
     def parameters(self):
         """
@@ -57,38 +86,50 @@ class Linear:
         """
         return [self.weight, self.bias]
 
-class Exp:
+class Exp(Module):
     """
     Applies the exponential function to the output values from the previous layer
     """
     def __call__(self, x: Tensor) -> Tensor:
         return x.exp()
 
-class Sigmoid:
+class Sigmoid(Module):
     """
     Applies the Sigmoid activation to the output values from the previous layer
     """
     def __call__(self, x: Tensor) -> Tensor:
         return x.sigmoid()
     
-class Tanh:
+class Tanh(Module):
     """
     Applies the Tanh activation to the output values from the previous layer
     """
     def __call__(self, x: Tensor) -> Tensor:
         return x.tanh()
 
-class ReLU:
+class ReLU(Module):
     """
     Applies the ReLU activation to the output values from the previous layer
     """
     def __call__(self, x: Tensor) -> Tensor:
         return x.relu()
 
-class Sequential:
+class Sequential(Module):
     """
     Builder class for connecting the layers and activation functions
     for the neural network
     """
     def __init__(self, *layers):
         self.layers = layers
+
+    def __call__(self, x: Tensor) -> Tensor:
+        for layer in self.layers:
+            x = layer(x)
+        return x
+    
+    def parameters(self):
+        """
+        Returns all the parameters within the neural network as a single list
+        """
+        return [p for layer in self.layers for p in layer.parameters()]
+    

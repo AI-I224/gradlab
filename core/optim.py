@@ -31,8 +31,23 @@ class Optimiser:
         raise NotImplementedError
 
 class SGD(Optimiser):
-    def __init__(self, params):
+    """
+    Implements Stochastic Gradient Descent Algorithm
+    """
+    def __init__(self, params, lr=0.01, momentum=0.0):
         super().__init__(params)
+        self.lr = lr
+        self.momentum = momentum
+        self.velocities = [np.zeros_like(p.data, dtype=np.float32) for p in self.params]
+    
+    def step(self):
+        for p, v in zip(self.params, self.velocities):
+            if p.requires_grad:
+                if self.momentum:
+                    v[:] = self.momentum * v - self.lr * p.grad
+                    p.data += v
+                else:
+                    p.data -= self.lr * p.grad
 
 class AdaGrad(Optimiser):
     def __init__(self, params):

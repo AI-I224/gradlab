@@ -32,7 +32,7 @@ class Optimiser:
 
 class SGD(Optimiser):
     """
-    Implements Stochastic Gradient Descent Algorithm
+    Implements Stochastic Gradient Descent Optimisation Algorithm
     """
     def __init__(self, params, lr=0.01, momentum=0.0):
         super().__init__(params)
@@ -58,5 +58,29 @@ class RMSProp(Optimiser):
         super().__init__(params)
 
 class Adam(Optimiser):
-    def __init__(self, params):
+    """
+    Implements Adam Optimisation Algorithm
+    """
+    def __init__(self, params, lr=0.001, betas=(0.9, 0.999), eps=1e-08):
         super().__init__(params)
+        self.lr = lr
+        self.betas = betas
+        self.eps = eps
+        self.t = 0
+
+        self.m = [np.zeros_like(p.data, dtype=np.float32) for p in self.params]
+        self.v = [np.zeros_like(p.data, dtype=np.float32) for p in self.params]
+
+    def step(self):
+        self.t += 1
+        b1, b2 = self.betas
+
+        for p, m, v in zip(self.params, self.m, self.v):
+            if p.requires_grad:
+                m[:] = b1 * m + (1 - b1) * p.grad
+                v[:] = b2 * v + (1 - b2) * (p.grad ** 2)
+
+                m_hat = m / (1 - b1 ** self.t)
+                v_hat = v / (1 - b2 ** self.t)
+
+                p.data -= self.lr * m_hat / (np.sqrt(v_hat) + self.eps)

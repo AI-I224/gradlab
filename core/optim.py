@@ -9,8 +9,8 @@ import numpy as np
 
 class Optimiser:
     """
-    The superclass keeps track of the parameters and provides a class
-    for using different optimisation methods
+    The superclass keeps track of the parameters and provides a structure
+    for implementing different optimisation methods
     """
     def __init__(self, params):
         self.params = list(params) # Store all trainable parameters
@@ -25,7 +25,23 @@ class Optimiser:
 
     def step(self):
         """
-        Update parameters
+        Base method for update parameters in a single optimisation step,
+        which should be implemented by subclasses (i.e. SGD, Adam)
         """
         raise NotImplementedError
-    
+
+class SGD(Optimiser):
+    def __init__(self, params):
+        super().__init__(params)
+
+class AdaGrad(Optimiser):
+    def __init__(self, params):
+        super().__init__(params)
+
+class RMSProp(Optimiser):
+    def __init__(self, params):
+        super().__init__(params)
+
+class Adam(Optimiser):
+    def __init__(self, params):
+        super().__init__(params)

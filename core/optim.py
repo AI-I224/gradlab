@@ -11,9 +11,12 @@ class Optimiser:
     """
     The superclass keeps track of the parameters and provides a structure
     for implementing different optimisation methods
+
+    Attributes:
+        params: list of all trainable parameters
     """
     def __init__(self, params):
-        self.params = list(params) # Store all trainable parameters
+        self.params = list(params)
 
     def zero_grad(self):
         """
@@ -33,6 +36,14 @@ class Optimiser:
 class SGD(Optimiser):
     """
     Implements Stochastic Gradient Descent Optimisation Algorithm
+
+    Attributes:
+        params: list of all trainable parameters
+        lr: controls how much to change the model in response to the estimated error
+          each time the model weights are updated
+        momentum: adds a fraction of the previous update to the current one,
+          simulating inertia which helps smooth oscillations and speed up
+          convergence
     """
     def __init__(self, params, lr=0.01, momentum=0.0):
         super().__init__(params)
@@ -55,6 +66,12 @@ class SGD(Optimiser):
 class AdaGrad(Optimiser):
     """
     Implements AdaGrad Optimisation Algorithm
+
+    Attributes:
+        params: list of all trainable parameters
+        lr: controls how much to change the model in response to the estimated error
+          each time the model weights are updated
+        eps: a constant to prevent division by zero
     """
     def __init__(self, params, lr=0.01, eps=1e-8):
         super().__init__(params)
@@ -76,6 +93,13 @@ class AdaGrad(Optimiser):
 class RMSProp(Optimiser):
     """
     Implements Root Mean Square Propogation Optimisation Algorithm
+
+    Attributes:
+        params: list of all trainable parameters
+        lr: controls how much to change the model in response to the estimated error
+          each time the model weights are updated
+        betas: controls how quickly the moving average of squared gradients changes
+        eps: a constant to prevent division by zero
     """
     def __init__(self, params, lr=0.001, beta=0.9, eps=1e-8):
         super().__init__(params)
@@ -98,6 +122,13 @@ class RMSProp(Optimiser):
 class Adam(Optimiser):
     """
     Implements Adam Optimisation Algorithm
+
+    Attributes:
+        params: list of all trainable parameters
+        lr: controls how much to change the model in response to the estimated error
+          each time the model weights are updated
+        betas: controls how quickly the moving average of squared gradients changes
+        eps: a constant to prevent division by zero
     """
     def __init__(self, params, lr=0.001, betas=(0.9, 0.999), eps=1e-08):
         super().__init__(params)

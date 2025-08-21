@@ -41,6 +41,9 @@ class SGD(Optimiser):
         self.velocities = [np.zeros_like(p.data, dtype=np.float32) for p in self.params]
     
     def step(self):
+        """
+        Optimisation step for algorithm
+        """
         for p, v in zip(self.params, self.velocities):
             if p.requires_grad:
                 if self.momentum:
@@ -50,12 +53,47 @@ class SGD(Optimiser):
                     p.data -= self.lr * p.grad
 
 class AdaGrad(Optimiser):
-    def __init__(self, params):
+    """
+    Implements AdaGrad Optimisation Algorithm
+    """
+    def __init__(self, params, lr=0.01, eps=1e-8):
         super().__init__(params)
+        self.lr = lr
+        self.eps = eps
+        self.g_sum = [np.zeros_like(p.data, dtype=np.float32) for p in self.params]
+
+    def step(self):
+        """
+        Optimisation step for algorithm
+        """
+        for i, p in enumerate(self.params):
+            if p.grad is None:
+                continue
+            # g_sum is the sum of the squared gradients
+            self.g_sum[i] += p.grad ** 2
+            p.data -= self.lr * p.grad / (np.sqrt(self.g_sum[i]) + self.eps)
 
 class RMSProp(Optimiser):
-    def __init__(self, params):
+    """
+    Implements Root Mean Square Propogation Optimisation Algorithm
+    """
+    def __init__(self, params, lr=0.001, beta=0.9, eps=1e-8):
         super().__init__(params)
+        self.lr = lr
+        self.beta = beta
+        self.eps = eps
+        self.v = [np.zeros_like(p.data, dtype=np.float32) for p in self.params]
+
+    def step(self):
+        """
+        Optimisation step for algorithm
+        """
+        for i, p in enumerate(self.params):
+            if p.grad is None:
+                continue
+            # v is the exponentially weighted average of the squared gradient at time step, t
+            self.v[i] = self.beta * self.v[i] + (1 - self.beta) * (p.grad ** 2)
+            p.data -= self.lr * p.grad / (np.sqrt(self.v[i]) + self.eps)
 
 class Adam(Optimiser):
     """
@@ -72,6 +110,9 @@ class Adam(Optimiser):
         self.v = [np.zeros_like(p.data, dtype=np.float32) for p in self.params]
 
     def step(self):
+        """
+        Optimisation step for algorithm
+        """
         self.t += 1
         b1, b2 = self.betas
 
